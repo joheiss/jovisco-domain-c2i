@@ -255,4 +255,19 @@ describe('invoice tests', () => {
             expect(invoice.header.vatPercentage).toBe(19.99);
         });
     });
+
+    describe('invoice items', () => {
+        let invoice: Invoice;
+        beforeEach(() => {
+            invoice = mockInvoice();
+        });
+
+        it('should return the correct total cash discount amount', () =>{
+            expect(invoice.items.totalCashDiscountAmount).toBe(35.7);
+        });
+
+        it('should return the correct total cash discount base amount', () =>{
+            expect(invoice.items.totalCashDiscountBaseAmount).toBe(1309.0);
+        });
+    });
 });
