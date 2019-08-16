@@ -1,0 +1,26 @@
+{
+  "name": "jovisco-domain-c2i",
+  "version": "1.0.0",
+  "description": "Jovisco Domain Contract to Invoice",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "pkg:version": "npm version patch",
+    "pkg:publish": "npm publish"
+  },
+  "author": "Josef Heiss <josef.heiss@jovisco.de> (http://www.jovisco-web.de)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.17",
+    "@types/luxon": "^1.15.2",
+    "@types/node": "^12.7.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "jest": "^24.8.0",
+    "luxon": "^1.17.2",
+    "ts-jest": "^24.0.2"
+  }
+}
