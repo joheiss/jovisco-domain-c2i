@@ -1,4 +1,4 @@
-import { TransactionItemData } from '../core/transaction-item-data';
+import { TransactionItemData } from '../core/transactions';
 
 export interface InvoiceItemData extends TransactionItemData {
     contractItemId?: number;

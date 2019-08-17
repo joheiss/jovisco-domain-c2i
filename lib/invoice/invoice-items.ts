@@ -1,4 +1,4 @@
-import { TransactionItems } from '../core/transaction-items';
+import { TransactionItems } from '../core/transactions/transaction-items';
 import { InvoiceItem } from './invoice-item';
 import { InvoiceItemData } from './invoice-item-data';
 

@@ -19,12 +19,16 @@ export abstract class TransactionItems<
     get(id: number): T {
         const item = this.items.find(item => item.data.id === id);
         if (!item) {
-            throw new Error(`item_not_found:${id} `);
+            throw new Error(`item_not_found: ${id}`);
         }
         return item;
     }
 
-    nextId(): number {
+    get length(): number {
+        return this.items.length;
+    }
+
+    get nextId(): number {
         if (this.items.length === 0) {
             return 1;
         }

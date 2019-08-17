@@ -3,6 +3,7 @@ import { TransactionItems } from './transaction-items';
 import { TransactionHeaderData } from './transaction-header-data';
 import { TransactionItem } from './transaction-item';
 import { TransactionItemData } from './transaction-item-data';
+import { SimpleTexts, SimpleTextData } from '../texts';
 
 export abstract class Transaction<
     H extends TransactionHeader<V>,
@@ -11,11 +12,12 @@ export abstract class Transaction<
     I extends TransactionItem<U>,
     U extends TransactionItemData
 > {
-    constructor(protected _header: H, protected _items: S) {}
+    constructor(protected _header: H, protected _items: S, protected _texts?: SimpleTexts, ) {}
 
-    get data(): { header: V; items: U[] } {
+    get data(): { header: V; texts: SimpleTextData[], items: U[] } {
         return {
             header: this._header.data,
+            texts: this._texts ? this._texts.data : [],
             items: this._items.data,
         };
     }
@@ -26,5 +28,9 @@ export abstract class Transaction<
 
     get items(): S {
         return this._items;
+    }
+
+    get texts(): SimpleTexts | undefined {
+        return this._texts;
     }
 }

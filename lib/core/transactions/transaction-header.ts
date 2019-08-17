@@ -1,6 +1,6 @@
-import { BoHeader } from './bo-header';
+import { BoHeader } from '../bo-header';
 import { TransactionHeaderData } from './transaction-header-data';
-import { DateUtility } from '../utils/date-utility';
+import { DateUtility } from '../../utils/date-utility';
 
 export abstract class TransactionHeader<V extends TransactionHeaderData> extends BoHeader<V> {
    

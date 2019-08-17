@@ -1,13 +1,17 @@
 import { InvoiceFactory } from '../lib/invoice/invoice-factory';
 import { InvoiceHeaderData } from '../lib/invoice/invoice-header-data';
 import { InvoiceItemData } from '../lib/invoice/invoice-item-data';
-import { mockInvoice } from './mock-invoice';
+import { mockInvoice, mockInvoiceItem } from './mock-invoice';
 import { Invoice } from '../lib/invoice/invoice';
 import { DateUtility } from '../lib/utils/date-utility';
 import { InvoiceStatus } from '../lib/invoice/invoice-status';
 import { PaymentMethod } from '../lib/invoice/payment-method';
 import { BillingMethod } from '../lib/invoice/billing-method';
 import { BoType } from '../lib/core/bo-type';
+import { InvoiceItem } from '../lib/invoice';
+import { TextType } from '../lib/core/texts';
+import { InvoiceHeader } from '../lib/invoice/invoice-header';
+import { SimpleText } from '../lib/core/texts/simple-text';
 
 describe('invoice tests', () => {
     it('should create an invoice from default values', () => {
@@ -100,13 +104,11 @@ describe('invoice tests', () => {
         });
 
         it('should return the correct value for internal text', () => {
-            expect(invoice.header.internalText).toEqual(
-                'Das ist eine Testrechnung.'
-            );
+            expect(invoice.internalText).toEqual('Das ist ein interner Text.');
         });
 
         it('should return the correct value for invoice text', () => {
-            expect(invoice.header.invoiceText).toEqual('nach Aufwand');
+            expect(invoice.invoiceText).toEqual('Dieser Text wird auf der Rechnung gedruckt.');
         });
 
         it('should return the correct value for invoice status', () => {
@@ -212,13 +214,13 @@ describe('invoice tests', () => {
         });
 
         it('should set the correct value for internal text', () => {
-            invoice.header.internalText = 'Teständerung';
-            expect(invoice.header.internalText).toEqual('Teständerung');
+            invoice.internalText = 'Interner Text geändert';
+            expect(invoice.internalText).toEqual('Interner Text geändert');
         });
 
         it('should set the correct value for invoice text', () => {
-            invoice.header.invoiceText = 'geändert';
-            expect(invoice.header.invoiceText).toEqual('geändert');
+            invoice.internalText = 'Neuer Rechnungstext';
+            expect(invoice.internalText).toEqual('Neuer Rechnungstext');
         });
 
         it('should set the correct value for invoice status', () => {
@@ -262,12 +264,128 @@ describe('invoice tests', () => {
             invoice = mockInvoice();
         });
 
-        it('should return the correct total cash discount amount', () =>{
-            expect(invoice.items.totalCashDiscountAmount).toBe(35.7);
+        it('should return the correct total cash discount amount', () => {
+            expect(invoice.items.totalCashDiscountAmount).toBe(39.27);
         });
 
-        it('should return the correct total cash discount base amount', () =>{
+        it('should return the correct total cash discount base amount', () => {
             expect(invoice.items.totalCashDiscountBaseAmount).toBe(1309.0);
         });
+
+        it('should return the correct total discounted net value', () => {
+            expect(invoice.items.totalDiscountedNetValue).toBe(1067.0);
+        });
+
+        it('should return the correct total gross value', () => {
+            expect(invoice.items.totalGrossValue).toBe(1309.0);
+        });
+
+        it('should return the correct total net value', () => {
+            expect(invoice.items.totalNetValue).toBe(1100.0);
+        });
+
+        it('should return the correct total payment amount', () => {
+            expect(invoice.items.totalPaymentAmount).toBe(1269.73);
+        });
+
+        it('should return the correct total vat amount', () => {
+            expect(invoice.items.totalVatAmount).toBe(209.0);
+        });
+
+        it('should add an item', () => {
+            const item = mockInvoiceItem();
+            invoice.items.add(item);
+            expect(invoice.items.length).toBe(3);
+            expect(invoice.items.totalNetValue).toBe(1200.0);
+        });
+
+        it('should retrieve a certain item', () => {
+            const item = invoice.items.get(2);
+            expect(item.id).toBe(2);
+            expect(item.description).toEqual('Reisezeit');
+        });
+
+        it('should retrieve the correct number of items', () => {
+            expect(invoice.items.length).toBe(2);
+        });
+
+        it('should return the correct next item number', () => {
+            expect(invoice.items.nextId).toBe(3);
+        });
+
+        it('should remove a certain item', () => {
+            invoice.items.remove(1);
+            expect(invoice.items.length).toBe(1);
+            expect(invoice.items.get(2).id).toBe(2);
+        });
     });
+
+    describe('invoice item', () => {
+        let invoice: Invoice;
+        let item: InvoiceItem;
+        beforeEach(() => {
+            invoice = mockInvoice();
+            item = invoice.items.get(1);
+        });
+
+        it('should return the correct cash discount percentage for the item', () => {
+            expect(item.cashDiscountPercentage).toBe(3.0);
+        });
+
+        it('should return the correct contract item id', () => {
+            expect(item.contractItemId).toBe(1);
+        });
+
+        it('should return the correct description', () => {
+            expect(item.description).toEqual('Arbeitszeit');
+        });
+
+        it('should return the correct quantity', () => {
+            expect(item.quantity).toBe(10);
+        });
+
+        it('should return the correct quantity unit', () => {
+            expect(item.quantityUnit).toEqual('Std.');
+        });
+
+        it('should return the correct price per unit', () => {
+            expect(item.pricePerUnit).toBe(100.0);
+        });
+
+        it('should return the correct value for cash discount allowed', () => {
+            expect(item.cashDiscountAllowed).toBeTruthy();
+        });
+        it('should return the correct vat percentage', () => {
+            expect(item.vatPercentage).toBe(19);
+        });
+
+        it('should return the correct discountable value', () => {
+            expect(item.discountableValue).toBe(1190.0);
+        });
+
+        it('should return the correct gross value', () => {
+            expect(item.grossValue).toBe(1190.0);
+        });
+
+        it('should return the correct net value', () => {
+            expect(item.netValue).toBe(1000.0);
+        });
+
+        it('should return the correct vat value', () => {
+            expect(item.vatValue).toBe(190.0);
+        });
+
+        it('should return the correct cash discount value', () => {
+            expect(item.cashDiscountValue).toBe(35.7);
+        });
+
+        it('should return the correct discounted net value', () => {
+            expect(item.discountedNetValue).toBe(970.0);
+        });
+
+        it('should return the correct discounted value', () => {
+            expect(item.discountedValue).toBe(1154.3);
+        });
+    });
+
 });

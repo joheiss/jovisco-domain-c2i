@@ -1,4 +1,4 @@
-import { TransactionItem } from '../core/transaction-item';
+import { TransactionItem } from '../core/transactions';
 import { InvoiceItemData } from './invoice-item-data';
 
 export class InvoiceItem extends TransactionItem<InvoiceItemData> {

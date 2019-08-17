@@ -1,4 +1,4 @@
-import { TransactionHeader } from '../core/transaction-header';
+import { TransactionHeader } from '../core/transactions';
 import { InvoiceHeaderData } from './invoice-header-data';
 import { InvoiceStatus } from './invoice-status';
 import { DateUtility } from '../utils/date-utility';
@@ -65,20 +65,6 @@ export class InvoiceHeader extends TransactionHeader<InvoiceHeaderData> {
     }
     set dueDays(value: number) {
         this._data.dueDays = value;
-    }
-
-    get invoiceText(): string | undefined {
-        return this._data.invoiceText;
-    }
-    set invoiceText(value: string | undefined) {
-        this._data.invoiceText = value;
-    }
-
-    get internalText(): string | undefined {
-        return this._data.internalText;
-    }
-    set internalText(value: string | undefined) {
-        this._data.internalText = value;
     }
 
     get isBilled(): boolean {

@@ -1,4 +1,4 @@
-import { TransactionHeaderData } from '../core/transaction-header-data';
+import { TransactionHeaderData } from '../core/transactions';
 import { InvoiceStatus } from './invoice-status';
 import { BillingMethod } from './billing-method';
 import { PaymentMethod } from './payment-method';
@@ -16,6 +16,4 @@ export interface InvoiceHeaderData extends TransactionHeaderData {
     paymentTerms?: string;
     paymentMethod?: PaymentMethod;
     vatPercentage?: number;
-    invoiceText?: string;
-    internalText?: string;
 }
