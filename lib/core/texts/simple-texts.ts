@@ -1,6 +1,7 @@
 import { SimpleText } from "./simple-text";
 import { TextType } from "./text-type";
 import { SimpleTextData } from "./simple-text-data";
+import { SimpleTextFactory } from "./simple-text-factory";
 
 export class SimpleTexts {
     constructor(protected _data: SimpleText[]) {}
@@ -11,6 +12,31 @@ export class SimpleTexts {
 
     get length(): number {
         return this._data.length;
+    }
+    
+    get invoiceText(): string | undefined {
+        try {
+            return this.get(TextType.InvoiceText).text;
+        } catch (e) {
+            return undefined;
+        }
+        
+    }
+    set invoiceText(value: string | undefined) {
+        const text = SimpleTextFactory.fromData({ type: TextType.InvoiceText, text: value });
+        this.set(text);
+    }
+
+    get internalText(): string | undefined {
+        try {
+            return this.get(TextType.InternalText).text;
+        } catch (e) {
+            return undefined;
+        }
+    }
+    set internalText(value: string | undefined) {
+        const text = SimpleTextFactory.fromData({ type: TextType.InternalText, text: value });
+        this.set(text);
     }
     
     add(text: SimpleText): void {
@@ -41,4 +67,6 @@ export class SimpleTexts {
             found.text = text.text;
         }
     }
+
+
 }

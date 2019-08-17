@@ -7,13 +7,15 @@ import { InvoiceItemData } from '../lib/invoice/invoice-item-data';
 import { InvoiceItem } from '../lib/invoice';
 import { InvoiceItemFactory } from '../lib/invoice/invoice-item-factory';
 import { SimpleTextData, TextType } from '../lib/core/texts';
+import { PartnerFunctionType } from '../lib/core/transactions/partner-function-type';
+import { TransactionPartnerData } from '../lib/core/transactions';
 
 export const mockInvoice = (): Invoice => {
     const issuedAt = DateUtility.getCurrentDate();
     const periodName = `${Info.months()[issuedAt.getMonth() - 1]}`;
     const billingPeriod = `${periodName} ${issuedAt.getFullYear()}`;
 
-    const data: { header: InvoiceHeaderData, items: InvoiceItemData[], texts: SimpleTextData[] } = {
+    const data: { header: InvoiceHeaderData, partners: TransactionPartnerData[], items: InvoiceItemData[], texts: SimpleTextData[] } = {
         header: {
             id: '5901',
             organization: 'GHQ',
@@ -27,9 +29,21 @@ export const mockInvoice = (): Invoice => {
             // invoiceText: 'nach Aufwand',
             issuedAt: issuedAt,
             paymentTerms: '30 Tage: 3% Skonto; 60 Tage: netto',
-            receiverId: '1901',
+            // receiverId: '1901',
             vatPercentage: 19.0,
         },
+        partners: [
+            {
+                function: PartnerFunctionType.Customer,
+                id: '1901',
+                primary: true
+            },
+            {
+                function: PartnerFunctionType.InvoiceReceiver,
+                id: '3901',
+                primary: true
+            },
+        ],
         items: [
             {
                 id: 1,

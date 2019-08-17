@@ -9,9 +9,8 @@ import { PaymentMethod } from '../lib/invoice/payment-method';
 import { BillingMethod } from '../lib/invoice/billing-method';
 import { BoType } from '../lib/core/bo-type';
 import { InvoiceItem } from '../lib/invoice';
-import { TextType } from '../lib/core/texts';
-import { InvoiceHeader } from '../lib/invoice/invoice-header';
-import { SimpleText } from '../lib/core/texts/simple-text';
+import { SimpleTextData } from '../lib/core/texts';
+import { TransactionPartnerData } from '../lib/core/transactions';
 
 describe('invoice tests', () => {
     it('should create an invoice from default values', () => {
@@ -22,7 +21,9 @@ describe('invoice tests', () => {
     it('should create an invoice containing default values, if an empty imput has been provided', () => {
         const data = {
             header: {} as InvoiceHeaderData,
+            partners: [] as TransactionPartnerData[],
             items: [] as InvoiceItemData[],
+            texts: [] as SimpleTextData[],
         };
         const invoice = InvoiceFactory.fromData(data);
         console.log('invoice: ', invoice.data);
@@ -104,11 +105,11 @@ describe('invoice tests', () => {
         });
 
         it('should return the correct value for internal text', () => {
-            expect(invoice.internalText).toEqual('Das ist ein interner Text.');
+            expect(invoice.texts.internalText).toEqual('Das ist ein interner Text.');
         });
 
         it('should return the correct value for invoice text', () => {
-            expect(invoice.invoiceText).toEqual('Dieser Text wird auf der Rechnung gedruckt.');
+            expect(invoice.texts.invoiceText).toEqual('Dieser Text wird auf der Rechnung gedruckt.');
         });
 
         it('should return the correct value for invoice status', () => {
@@ -144,8 +145,12 @@ describe('invoice tests', () => {
             );
         });
 
-        it('should return the correct receiver id', () => {
-            expect(invoice.header.receiverId).toEqual('1901');
+        it('should return the correct customer id', () => {
+            expect(invoice.partners.customerId).toEqual('1901');
+        });
+
+        it('should return the correct invoice receiver id', () => {
+            expect(invoice.partners.invoiceReceiverId).toEqual('3901');
         });
 
         it('should return the correct revenue period', () => {
@@ -214,13 +219,13 @@ describe('invoice tests', () => {
         });
 
         it('should set the correct value for internal text', () => {
-            invoice.internalText = 'Interner Text geändert';
-            expect(invoice.internalText).toEqual('Interner Text geändert');
+            invoice.texts.internalText = 'Interner Text geändert';
+            expect(invoice.texts.internalText).toEqual('Interner Text geändert');
         });
 
         it('should set the correct value for invoice text', () => {
-            invoice.internalText = 'Neuer Rechnungstext';
-            expect(invoice.internalText).toEqual('Neuer Rechnungstext');
+            invoice.texts.internalText = 'Neuer Rechnungstext';
+            expect(invoice.texts.internalText).toEqual('Neuer Rechnungstext');
         });
 
         it('should set the correct value for invoice status', () => {
@@ -248,8 +253,9 @@ describe('invoice tests', () => {
         });
 
         it('should set the correct value for receiver id', () => {
-            invoice.header.receiverId = '1902';
-            expect(invoice.header.receiverId).toEqual('1902');
+            invoice.partners.customerId = '1902';
+            // invoice.header.receiverId = '1902';
+            expect(invoice.partners.customerId).toEqual('1902');
         });
 
         it('should set the correct vat percentage', () => {

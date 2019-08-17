@@ -4,6 +4,10 @@ export class TransactionPartner {
 
     constructor(protected _data: TransactionPartnerData) {}
 
+    get data(): TransactionPartnerData {
+        return this._data;
+    }
+    
     get function(): PartnerFunctionType {
         return this._data.function;
     }

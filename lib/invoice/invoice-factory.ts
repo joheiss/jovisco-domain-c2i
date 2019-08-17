@@ -13,10 +13,12 @@ import { BoType } from '../core/bo-type';
 import { DateUtility } from '../utils/date-utility';
 import { SimpleTextData } from '../core/texts';
 import { TransactionFactory } from '../core/transactions';
+import { TransactionPartnerData } from '../core/transactions/transaction-partner-data';
 
 export class InvoiceFactory {
     static defaultValues(): {
         header: InvoiceHeaderData;
+        partners: TransactionPartnerData[];
         items: InvoiceItemData[];
         texts: SimpleTextData[];
     } {
@@ -35,6 +37,7 @@ export class InvoiceFactory {
                 vatPercentage: 19.0,
                 isDeletable: true,
             },
+            partners: [],
             items: [],
             texts: [],
         };
@@ -42,15 +45,17 @@ export class InvoiceFactory {
 
     static fromData(data: {
         header: InvoiceHeaderData;
+        partners: TransactionPartnerData[];
         items: InvoiceItemData[];
-        texts?: SimpleTextData[];
+        texts: SimpleTextData[];
     }): Invoice {
         if (!data) {
             throw new Error('invalid_input');
         }
         const header = InvoiceFactory.headerFromData(data.header);
+        const partners = TransactionFactory.partnersFromData(data.partners);
         const items = InvoiceFactory.itemsFromData(data.items);  
-        const texts = TransactionFactory.textsFromData(data.texts || []);
+        const texts = TransactionFactory.textsFromData(data.texts);
         
         // copy cash discount percentage from header to items
         if (header.cashDiscountPercentage > 0) {
@@ -60,7 +65,7 @@ export class InvoiceFactory {
                 }
             });
         }
-        return new Invoice(header, items, texts);
+        return new Invoice(header, partners, items, texts);
     }
 
     private static headerFromData(input: InvoiceHeaderData): InvoiceHeader {
