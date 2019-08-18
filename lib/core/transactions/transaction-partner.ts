@@ -23,7 +23,7 @@ export class TransactionPartner {
     }
 
     get primary(): boolean {
-        return this._data.primary;
+        return this._data.primary || false;
     }
     set primary(value: boolean) {
         this._data.primary = value;
