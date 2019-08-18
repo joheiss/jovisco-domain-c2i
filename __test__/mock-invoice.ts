@@ -5,10 +5,10 @@ import { InvoiceFactory } from '../lib/invoice/invoice-factory';
 import { InvoiceHeaderData } from '../lib/invoice/invoice-header-data';
 import { InvoiceItemData } from '../lib/invoice/invoice-item-data';
 import { InvoiceItem } from '../lib/invoice';
-import { InvoiceItemFactory } from '../lib/invoice/invoice-item-factory';
 import { SimpleTextData, TextType } from '../lib/core/texts';
 import { PartnerFunctionType } from '../lib/core/transactions/partner-function-type';
 import { TransactionPartnerData } from '../lib/core/transactions';
+import { Factory } from '../lib/core/factory';
 
 export const mockInvoice = (): Invoice => {
     const issuedAt = DateUtility.getCurrentDate();
@@ -91,5 +91,6 @@ export const mockInvoiceItem = (): InvoiceItem => {
         quantityUnit: 'km',
         vatPercentage: 19.0
     };
-    return InvoiceItemFactory.fromData(data);
+    return Factory.fromData<InvoiceItem, InvoiceItemData>(InvoiceItem, data);
+    // return InvoiceItemFactory.fromData(data);
 }

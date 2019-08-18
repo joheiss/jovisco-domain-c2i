@@ -3,17 +3,18 @@ import {
     InvoiceItemData,
     InvoiceHeader,
     InvoiceItems,
-    InvoiceItemFactory,
     Invoice,
     InvoiceStatus,
     PaymentMethod,
     BillingMethod,
+    InvoiceItem,
 } from './';
 import { BoType } from '../core/bo-type';
 import { DateUtility } from '../utils/date-utility';
 import { SimpleTextData } from '../core/texts';
 import { TransactionFactory } from '../core/transactions';
 import { TransactionPartnerData } from '../core/transactions/transaction-partner-data';
+import { Factory } from '../core/factory';
 
 export class InvoiceFactory {
     static defaultValues(): {
@@ -78,7 +79,7 @@ export class InvoiceFactory {
     }
 
     private static itemsFromData(items: InvoiceItemData[]): InvoiceItems {
-        const newItems = items ? InvoiceItemFactory.fromDataArray(items) : [];
+        const newItems = items ? Factory.fromDataArray<InvoiceItem, InvoiceItemData>(InvoiceItem, items) : [];
         return new InvoiceItems(newItems);
     }
     

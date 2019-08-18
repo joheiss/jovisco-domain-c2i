@@ -4,7 +4,6 @@ export * from './invoice-header';
 export * from './invoice-header-data';
 export * from './invoice-item';
 export * from './invoice-item-data';
-export * from './invoice-item-factory';
 export * from './invoice-items';
 export * from './invoice-status';
 export * from './invoice';

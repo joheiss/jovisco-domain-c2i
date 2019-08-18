@@ -1,36 +1,28 @@
 import { TransactionPartner } from "./transaction-partner";
 import { PartnerFunctionType } from "./partner-function-type";
 import { TransactionPartnerData } from "./transaction-partner-data";
-import { TransactionPartnerFactory } from './simple-text-factory';
+import { Factory } from "../factory";
+import { Collection } from "../collection";
 
-export class TransactionPartners {
+export class TransactionPartners extends Collection<TransactionPartner, TransactionPartnerData> {
 
-    constructor(protected partners: TransactionPartner[]) {}
-
-    get data(): TransactionPartnerData[] {
-        return this.partners.map(p => p.data);
+    constructor(items: TransactionPartner[]) {
+        super(items);
     }
+
     
-    get length(): number {
-        return this.partners.length;
-    }
-
-    add(partner: TransactionPartner): void {
-        this.partners = [...this.partners, partner];
-    }
-
     get(id?: string, func?: PartnerFunctionType): TransactionPartner[] | undefined {
-        return this.partners.filter(p => id ? p.id === id : true && func ? p.function === func : true);
+        return this._items.filter(p => id ? p.id === id : true && func ? p.function === func : true);
     }
 
     remove(id?: string, func?: PartnerFunctionType): void {
-        this.partners = [
-            ...this.partners.filter(p => id ? p.id !== id : true && func ? p.function !== func : true)
+        this._items = [
+            ...this._items.filter(p => id ? p.id !== id : true && func ? p.function !== func : true)
         ]
     }
 
     set(partner: TransactionPartner) {
-        const found = this.partners.find(p => p.function === partner.function);
+        const found = this._items.find(p => p.function === partner.function);
         if (!found) {
             this.add(partner)
         } else {
@@ -39,15 +31,15 @@ export class TransactionPartners {
     }
 
     get customerId(): string | undefined {
-        const partner =  this.partners.find(p => p.function === PartnerFunctionType.Customer);
+        const partner =  this._items.find(p => p.function === PartnerFunctionType.Customer);
         return partner ? partner.id : undefined;
     }
     set customerId(value: string | undefined) {
-        const partner =  this.partners.find(p => p.function === PartnerFunctionType.Customer);
+        const partner =  this._items.find(p => p.function === PartnerFunctionType.Customer);
         if (partner) {
             partner.id = value || '';
         } else if (value) {
-            this.add(TransactionPartnerFactory.fromData({ 
+            this.add(Factory.fromData<TransactionPartner, TransactionPartnerData>(TransactionPartner, { 
                 function: PartnerFunctionType.Customer, 
                 id: value, 
                 primary: false}));
@@ -73,7 +65,7 @@ export class TransactionPartners {
     }
 
     private findOneByFunc(func: PartnerFunctionType): TransactionPartner | undefined {
-        const partners =  this.partners.filter(p => p.function === func);
+        const partners =  this._items.filter(p => p.function === func);
         if (!partners.length) {
             return undefined;
         } else if (partners.length === 1) {
@@ -87,6 +79,6 @@ export class TransactionPartners {
     }
 
     private findManyByFunc(func: PartnerFunctionType): TransactionPartner[] {
-        return this.partners.filter(p => p.function === func) || [];
+        return this._items.filter(p => p.function === func) || [];
     }
 }

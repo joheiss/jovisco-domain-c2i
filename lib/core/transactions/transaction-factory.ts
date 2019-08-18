@@ -1,17 +1,18 @@
-import { SimpleTextData, SimpleTexts, SimpleTextFactory } from "../texts";
+import { SimpleTextData, SimpleTexts, SimpleText } from "../texts";
 import { TransactionPartnerData } from './transaction-partner-data';
 import { TransactionPartners } from "./transaction-partners";
-import { TransactionPartnerFactory } from "./simple-text-factory";
+import { Factory } from "../factory";
+import { TransactionPartner } from "./transaction-partner";
 
 export class TransactionFactory {
 
     public static partnersFromData(partners: TransactionPartnerData[]): TransactionPartners {
-        const newPartners = TransactionPartnerFactory.fromDataArray(partners);
+        const newPartners = Factory.fromDataArray<TransactionPartner, TransactionPartnerData>(TransactionPartner, partners);
         return new TransactionPartners(newPartners);
     }
     
     public static textsFromData(texts: SimpleTextData[]): SimpleTexts {
-        const newTexts = SimpleTextFactory.fromDataArray(texts);
+        const newTexts = Factory.fromDataArray<SimpleText, SimpleTextData>(SimpleText, texts);
         return new SimpleTexts(newTexts);
     }
 }
